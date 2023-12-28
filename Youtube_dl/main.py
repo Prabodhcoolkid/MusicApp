@@ -27,6 +27,12 @@ class GUI():
         
         '''Search button'''
         # search a song 
+        self.search_label = Label(self.window, text='Search song: ', font=(None, 12))
+        self.search_label.place(x=40, y=30)
+        self.search_entry = Entry(self.window, width=50)
+        self.search_entry.place(x=210, y=31)
+        self.search_button = Button(self.window, text='Search', command=self.searched)
+        self.search_button.place(x=580, y=25)
 
         '''Browse button'''
         self.brws_button = Button(self.window, text='Browse', command=self.browse_button)
@@ -34,7 +40,7 @@ class GUI():
         
         '''Download button'''
         self.down_button = Button(self.window, text='Download', command=self.pressed)
-        self.down_button.place(x=40, y=150)
+        self.down_button.place(x=40, y=140)
         
         self.progress = ttk.Progressbar(self.window, orient = HORIZONTAL)
         self.progress.pack(side=BOTTOM, fill=X)
@@ -49,13 +55,13 @@ class GUI():
     def download(self, link, path:Optional[str]=None):
         self.link = link
         self.path = path
-        
+
         if self.path != None:
             run(f'youtube-dl --prefer-ffmpeg -o "{self.path}/%(title)s.%(ext)s" --extract-audio --audio-format mp3 {self.link}',
                  shell=True, capture_output=True, text=True).stdout
         else: run(f'youtube-dl --prefer-ffmpeg --extract-audio --audio-format mp3 {self.link}',
                  shell=True, capture_output=True, text=True).stdout
-              
+
     def pressed(self):
         self.progress.start()
         def callback():
@@ -79,7 +85,18 @@ class GUI():
 
         self.t = threading.Thread(target=callback)
         self.t.start()
+    
+    def searched(self):
+        # get youtube song url based off some keywords -> some API or ai algo, or selenium webdriver
+        pass
 
-        
-if __name__ == '__main__':
+
+
+user_input = input("Add(A) or Download(D):")
+if user_input == 'A':
     GUI()
+elif user_input == 'D':
+    path = ""
+    
+else:
+    pass
