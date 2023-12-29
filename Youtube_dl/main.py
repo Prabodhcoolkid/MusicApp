@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from typing import Optional
 import threading
-from subprocess import run
+import download
 
 class GUI():
     def __init__(self):
@@ -96,7 +96,7 @@ user_input = input("Add(A) or Download(D):")
 if user_input == 'A':
     GUI()
 elif user_input == 'D':
-    path = ""
+    download.download_songs()
     
 else:
     pass
