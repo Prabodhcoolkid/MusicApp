@@ -107,6 +107,9 @@ def convert_with_selenium(*args, url: str):
                 try:
                     run_task(i - 1)
                     run_task(i)
+                except NoSuchElementException or ElementNotInteractableException:
+                    run_task(i - 1)
+                    run_task(i)
                 except ElementClickInterceptedException:
                     element_intercepted_exception_handling()
                     break
