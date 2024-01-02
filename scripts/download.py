@@ -138,29 +138,27 @@ def download_songs_with_yt1s(links):
 def download_song_with_y2meta(links, path):
     for link in links:
         file_length = os.listdir(path)
-        converter_url = "https://y2meta.app/en/youtube-to-mp3/b23_UkBrrQk"
+        converter_url = "https://y2meta.app/en/youtube-to-mp3/"
         url_input_xpath = '//*[@id="txt-url"]'
+        url_submit_xpath = '//*[@id="btn-submit"]'
         download_button1_xpath = '//*[@id="process_mp3"]'
         download_button2_xpath = '//*[@id="process-result"]/div/a[1]'
         convert_with_selenium(["send", url_input_xpath, link], ["wait", 1],
+                              ["click", "x", url_submit_xpath], ["wait", 1],
                               ["click", "x", download_button1_xpath], ["wait", 1],
                               ["click", "x", download_button2_xpath],
                               url=converter_url)
         print("downloading\n")
-        while file_length != len(os.listdir(path)):
+        print(file_length)
+        while file_length == len(os.listdir(path)):
+            print(len(os.listdir(path)))
             time.sleep(1)
         list_of_files = glob.glob(f"{path}\\*")  # * means all if need specific format then *.csv
         latest_file = max(list_of_files, key=os.path.getctime)
         print(latest_file)
-        if latest_file[-4] != ".mp3":
+        if latest_file[-4:] != ".mp3":
             # Delete file
+            print(latest_file[-4:])
             print("need to delete file")
 
-
-
-
-
-
-
-download_song_with_y2meta(get_links())
 
