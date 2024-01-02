@@ -22,7 +22,7 @@ class GUI():
         ''' Path line '''
         self.folder_path = StringVar()
         self.path_label = Label(self.window, text='Save mp3 to: ',font=(None, 12))
-        self.path_label.place(x=40, y = 90)
+        self.path_label.place(x=40, y=90)
         self.path_entry = Entry(self.window, width=50, textvariable=self.folder_path)
         self.path_entry.place(x=210, y=91)
         
@@ -38,10 +38,7 @@ class GUI():
         '''Browse button'''
         self.brws_button = Button(self.window, text='Browse', command=self.browse_button)
         self.brws_button.place(x=580, y=85)
-        
-        '''Download button'''
-        self.down_button = Button(self.window, text='Download', command=self.pressed)
-        self.down_button.place(x=40, y=140)
+
         
         self.progress = ttk.Progressbar(self.window, orient = HORIZONTAL)
         self.progress.pack(side=BOTTOM, fill=X)
@@ -52,14 +49,6 @@ class GUI():
         self.folder_path
         self.filename = filedialog.askdirectory()
         self.folder_path.set(self.filename)
-        
-    def download(self):
-        # Fix this?
-        self.link = link
-        self.path = path
-
-        if self.path != None:
-            download.download_songs()
 
     def pressed(self):
         self.progress.start()
