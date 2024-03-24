@@ -1,4 +1,6 @@
 # MusicApp
+If you hate having to pay money for spotify or youtube music this application can benefit you if you have an mp3 reader allowing you to listen to mp3 files.
+
 This application uses Selenium webdriver to install all songs using a youtube link.
 1. Reads from a list of url
 2. Based on a Selenium task worflow I developed opens a Chromedriver
