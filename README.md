@@ -15,4 +15,9 @@ Use at your own risk.
 When I developed this application I was unaware of Linux Kernel commands.
 I realized you can modify this application to extract the download url from the website and run the `wget` command to download files from the internet. 
 
+Install all dependencies:
+`pip install -r scripts/requirements.txt`
+
+
+
 Inspiration code: https://github.com/nomspls/youtubeToMp3/blob/master/requirements.txt

@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox, ttk
 from typing import Optional
 import threading
 import download
+import os
 import subprocess
 
 class GUI():
@@ -84,7 +85,7 @@ user_input = input("Add(A) or Download(D):")
 if user_input == 'A':
     GUI()
 elif user_input == 'D':
-    download.download_song_with_y2meta(download.get_links(), path=r"Your computer path")  # Change the path to yours
+    download.download_song_with_y2meta(download.get_links(), path=os.environ.get("DOWNLOAD_FOLDER"))  
     
 else:
     pass
