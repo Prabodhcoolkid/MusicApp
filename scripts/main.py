@@ -3,8 +3,6 @@ from tkinter import filedialog, messagebox, ttk
 from typing import Optional
 import threading
 import download
-import os
-import subprocess
 
 class GUI():
     def __init__(self):
@@ -80,12 +78,11 @@ class GUI():
         pass
 
 
-
 user_input = input("Add(A) or Download(D):")
 if user_input == 'A':
     GUI()
 elif user_input == 'D':
-    download.download_song_with_y2meta(download.get_links(), path=os.environ.get("DOWNLOAD_FOLDER"))  
+    download.download_with_ezmp3(download.get_links())  
     
 else:
     pass

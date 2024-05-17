@@ -2,12 +2,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException, ElementClickInterceptedException
-import time
-import os
-import glob
+import time, os
 
 def get_links():
-    file_path = 'music.txt'
+    file_path = '../music.txt'
     # Read the links from the text file and create a list
     with open(file_path, 'r') as file:
         links = [line.strip() for line in file.readlines()]
@@ -52,32 +50,11 @@ def change_tab(driver: webdriver.Chrome):
 
 
 def convert_with_selenium(*args, url: str):
-
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
-    extension_file_path = 'C:\\Users\\abaadmin\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\cjpalhdlnbpafiamejdnhcphjbkeiagm\\1.54.0_32.crx'
-    options.add_extension(extension_file_path)
 
-    driver = webdriver.Chrome(options=options)
-    driver.get(url=url)
-
-    def element_intercepted_exception_handling():
-        # Getting link and opening it in new tab, rather than manually clicking an uninteractable element
-        element = driver.find_element(by=By.XPATH, value=args[i][2])
-        download_link = element.get_attribute("href")
-        driver.quit()
-        # open new webdriver with download link:
-        options2 = webdriver.ChromeOptions()
-        options2.add_experimental_option("detach", True)
-        options2.add_experimental_option("prefs", {
-            "download.defualt_directory": r"C:\Users\abaadmin\Downloads",
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-        })
-        new_driver = webdriver.Chrome(options=options2)
-        new_driver.get("https://google.com")
-        new_driver.execute_script(f'window.open("{download_link}", "_blank");')
+    driver = webdriver.Chrome(options=options, executable_path="..\\..\\..\\..\\..\\Downloads\\chromedriver.exe")
+    driver.get(url)
 
     for i in range(len(args)):
         def run_task(j: int):  # maybe add a keyword argument saying restart=False, and when true leads to recursive
@@ -85,10 +62,7 @@ def convert_with_selenium(*args, url: str):
                 element = driver.find_element(by=By.XPATH, value=args[j][1])
                 element.send_keys(args[j][2])
             elif args[j][0] == "click":
-                if args[j][1] == "x":
-                    element = driver.find_element(by=By.XPATH, value=args[j][2])
-                else:
-                    element = driver.find_element(by=By.ID, value=args[j][2])
+                element = driver.find_element(by=By.XPATH, value=args[j][2])
                 element.click()
             elif args[j][0] == "wait":
                 time.sleep(args[j][1])
@@ -106,33 +80,16 @@ def convert_with_selenium(*args, url: str):
             run_task(i)
         except NoSuchElementException or ElementNotInteractableException:
             print(f"restarting task {i}")
-            # TODO: go over https://www.selenium.dev/documentation/webdriver/waits/
-            while True:
-                try:
-                    run_task(i - 1)
-                    run_task(i)
-                except NoSuchElementException or ElementNotInteractableException:
-                    run_task(i - 1)
-                    run_task(i)
-                except ElementClickInterceptedException:
-                    element_intercepted_exception_handling()
-                    break
-                else:
-                    break
-        except ElementClickInterceptedException:
-            element_intercepted_exception_handling()
-
-
 
 # Code for downloading a list of links
-def download_with_ezmp3(links, path):
-    xpaths = get_xpaths('scripts\ezmp3\xpaths.txt')
+def download_with_ezmp3(links):
+    xpaths = get_xpaths('ezmp3/xpaths.txt')
     for link in links:
         converter_url = "https://ezmp3.cc/"
         convert_with_selenium(
             ["send", xpaths[0], link], ["wait", 1],
-            ["click", "x", xpaths[1]], ["wait", 7],
-            ["click", "x", xpaths[2]],
+            ["click", xpaths[1]], ["wait", 7],
+            ["click", xpaths[2]],
             url=converter_url
             )
         print("downloading")
