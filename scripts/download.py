@@ -7,12 +7,16 @@ import os
 import glob
 
 def get_links():
-    file_path = '../music.txt'
+    file_path = 'music.txt'
     # Read the links from the text file and create a list
     with open(file_path, 'r') as file:
         links = [line.strip() for line in file.readlines()]
     return links
 
+def get_xpaths(path):
+    with open(path, mode="r") as file:
+        xpaths_raw = file.readlines()
+        return [xpath.rstrip('\n') for xpath in xpaths_raw]
 
 def change_iframe(driver: webdriver.Chrome):
     # Store iframe web element
@@ -121,47 +125,17 @@ def convert_with_selenium(*args, url: str):
 
 
 # Code for downloading a list of links
-def download_songs_with_yt1s(links):
+def download_with_ezmp3(links, path):
+    xpaths = get_xpaths('scripts\ezmp3\xpaths.txt')
     for link in links:
-        converter_url = "https://yt1s.ltd/en194h/youtube-to-mp3"
-        url_input_xpath = '//*[@id="txt-url"]'
-        url_convert_xpath = '//*[@id="btn-submit"]'
-        redirect_button_xpath = '//*[@id="mp3"]/table/tbody/tr/td[3]/a'
-        add_xpath = "//*[@id='prime-popover-close-button']/a/img"
-        download_button_id = 'A_downloadUrl'
-        convert_with_selenium(["send", url_input_xpath, link],
-                              ["click", "x", url_convert_xpath], ["wait", 1.5],
-                              ["click", "x", redirect_button_xpath], ["change", "tab"], ["wait", 10],
-                              ["click", "id", download_button_id], ["wait", 1], ["change", "iframe"],
-                              url=converter_url)
-        print("downloading\n")
-        break
+        converter_url = "https://ezmp3.cc/"
+        convert_with_selenium(
+            ["send", xpaths[0], link], ["wait", 1],
+            ["click", "x", xpaths[1]], ["wait", 7],
+            ["click", "x", xpaths[2]],
+            url=converter_url
+            )
+        print("downloading")
 
-
-def download_song_with_y2meta(links, path):
-    for link in links:
-        file_length = os.listdir(path)
-        converter_url = "https://y2meta.app/en/youtube-to-mp3/"
-        url_input_xpath = '//*[@id="txt-url"]'
-        url_submit_xpath = '//*[@id="btn-submit"]'
-        download_button1_xpath = '//*[@id="process_mp3"]'
-        download_button2_xpath = '//*[@id="process-result"]/div/a[1]'
-        convert_with_selenium(["send", url_input_xpath, link], ["wait", 1],
-                              ["click", "x", url_submit_xpath], ["wait", 1],
-                              ["click", "x", download_button1_xpath], ["wait", 1],
-                              ["click", "x", download_button2_xpath],
-                              url=converter_url)
-        print("downloading\n")
-        print(file_length)
-        while file_length == len(os.listdir(path)):
-            print(len(os.listdir(path)))
-            time.sleep(1)
-        list_of_files = glob.glob(f"{path}\\*")  # * means all if need specific format then *.csv
-        latest_file = max(list_of_files, key=os.path.getctime)
-        print(latest_file)
-        if latest_file[-4:] != ".mp3":
-            # Delete file
-            print(latest_file[-4:])
-            print("need to delete file")
 
 
