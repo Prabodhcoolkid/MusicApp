@@ -1,8 +1,17 @@
+# GUI imports
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
+# Performance imports
 from typing import Optional
 import threading
-import download
+
+
+# Local imports
+from dotenv import load_dotenv
+import download, upload
+import os
+
+load_dotenv()
 
 class GUI():
     def __init__(self):
@@ -82,7 +91,4 @@ user_input = input("Add(A) or Download(D):")
 if user_input == 'A':
     GUI()
 elif user_input == 'D':
-    download.download_with_ezmp3(download.get_links())  
-    
-else:
-    pass
+    download.download_with_ezmp3(download.get_links())
