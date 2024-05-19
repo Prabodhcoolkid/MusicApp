@@ -13,7 +13,7 @@ class SeleniumWorkflow:
         if wait > 0:
             self.tasks = self.insert_wait(wait, tasks)
         else:
-            self.tasks = args
+            self.tasks = tasks
         self.recursion = recursion
         self.xpath = xpath
             
