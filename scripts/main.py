@@ -91,4 +91,4 @@ user_input = input("Add(A) or Download(D):")
 if user_input == 'A':
     GUI()
 elif user_input == 'D':
-    download.download_with_ezmp3(download.get_links())
+    download.download_with_ezmp3(download.get_links(), download_path=os.getenv('DOWNLOAD_PATH'))

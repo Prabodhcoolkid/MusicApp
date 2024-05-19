@@ -1,12 +1,14 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException, ElementClickInterceptedException
 
 # TODO: Improve the Selenium workflow class
 class SeleniumWorkflow:
-    def __init__(self, wait:int=0, recursion:bool=False, xpath:bool=False, tasks:list=[]):
+    def __init__(self, download_path:str, wait:int=0, recursion:bool=False, xpath:bool=False, tasks:list=[]):
+        self.download_path = download_path
         # Check for wait time
         if wait > 0:
             self.tasks = self.insert_wait(wait, tasks)
@@ -23,8 +25,21 @@ class SeleniumWorkflow:
             new_tasks.append(['wait', wait_time])
         return new_tasks
 
+    def get_options(self):
+        chrome_options = Options()
+        chrome_options.add_experimental_option('prefs', {
+            "download.default_directory": self.download_path,  
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "plugins.always_open_pdf_externally": True
+        })
+        chrome_options.add_experimental_option("detach", True)
+        return chrome_options
+
     def run_workflow(self):
-        driver = webdriver.Chrome(keep_alive=True)  
+        # setup the driver
+        options = self.get_options()
+        driver = webdriver.Chrome(options=options)
         try:
             for task in self.tasks:
                 action = task[0]
@@ -51,6 +66,7 @@ class SeleniumWorkflow:
                     xpath = task[1]
                     wait = WebDriverWait(driver, 3)
                     element = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+                    print("Waiting for element to be clickable")
                     element.click()
                 elif action == 'wait':
                     wait = WebDriverWait(driver, task[1])

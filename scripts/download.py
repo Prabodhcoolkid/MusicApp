@@ -15,18 +15,18 @@ def get_xpaths(path):
 
 
 # Code for downloading a list of links
-def download_with_ezmp3(links):
+def download_with_ezmp3(links, download_path:str):
     xpaths = get_xpaths('ezmp3/xpaths.txt')
-    for link in links:
-        converter_url = "https://ezmp3.cc/"
-        workflow = SeleniumWorkflow(
-            wait=1, recursion=False, xpath=True, tasks=[
-                ['open', converter_url],
-                ['input', xpaths[0], link],
-                ['click', xpaths[1]],
-                ['wait_for_click', xpaths[2]],
-            ])
-        workflow.run_workflow()
+    # for link in links:
+    converter_url = "https://ezmp3.cc/"
+    workflow = SeleniumWorkflow(
+        wait=1, recursion=False, xpath=True, download_path=download_path, tasks=[
+            ['open', converter_url],
+            ['input', xpaths[0], links[1]],
+            ['click', xpaths[1]],
+            ['wait_for_click', xpaths[2]],
+        ])
+    workflow.run_workflow()
         
 
 
